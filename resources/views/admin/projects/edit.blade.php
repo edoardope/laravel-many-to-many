@@ -36,6 +36,33 @@ dark
                 <div class="alert alert-danger">{{ $message }}</div>
                 @enderror
             </div>
+            <div class="form-group">
+
+                @foreach( $technologies as $elem )
+                
+                <div class="form-check @error('tags') is-invalid @enderror">
+                
+                      @if( $errors->any() )
+                      <input class="form-check-input" type="checkbox" name="tags[]" value="{{$elem->id}}" id="post-checkbox-{{$elem->id}}"
+                       {{ in_array( $elem->id, old('tags', [] ) ) ? 'checked' : '' }}>
+                      @else
+                      <input class="form-check-input" type="checkbox" name="tags[]" value="{{$elem->id}}" id="post-checkbox-{{$elem->id}}"
+                       {{ ( $project->technologies->contains($elem) ) ? 'checked' : '' }}>
+                      @endif
+                      <label class="form-check-label" for="post-checkbox-{{$elem->id}}">
+                        {{$elem->name}}
+                      </label>
+                </div>
+                
+                @endforeach
+                
+                </div>
+                
+                @error('tags')
+                <div class="alert alert-danger">
+                {{$message}}
+                </div>
+                @enderror
             <input class="btn btn-primary" type="submit" value="Submit" >
         </form>
     </div>

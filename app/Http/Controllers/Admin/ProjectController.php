@@ -104,12 +104,13 @@ class ProjectController extends Controller
     public function edit($id)
     {
         $types = Type::all();
+        $technologies = Technology::all();
         $user = auth()->user();
 
         if ($user && $user->role == 'admin') {
 
             $project = Project::findOrFail($id);
-            return view('admin.projects.edit', compact('project', 'types'));
+            return view('admin.projects.edit', compact('project', 'types', 'technologies'));
 
         }
 
@@ -142,6 +143,13 @@ class ProjectController extends Controller
 
         $project->update($form_data);
 
+        if ($request->has('tags')) {
+
+            $project->technologies()->sync($request->tags);
+        } else {
+            $project->technologies()->sync([]);
+        }
+
         return redirect()->route('admin.projects.index');
     }
 
@@ -160,6 +168,7 @@ class ProjectController extends Controller
             if ($project->cover_image) {
                 Storage::delete($project->cover_image);
             }
+            $project->technologies()->sync([]);
             $project->delete();
 
             return redirect()->route('admin.projects.index');
