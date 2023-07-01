@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Admin\Project;
+use App\Models\Admin\Technology;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Admin\Type;
@@ -40,8 +41,10 @@ class ProjectController extends Controller
 
         $user = auth()->user();
 
+        $technologies = Technology::all();
+
         if ($user && $user->role == 'admin') {
-            return view('admin.projects.create', compact('types'));
+            return view('admin.projects.create', compact('types', 'technologies'));
         }
 
         return redirect()->route('403');
@@ -55,6 +58,8 @@ class ProjectController extends Controller
      */
     public function store(Request $request)
     {
+
+        // dd($request);
         $form_data = $request->all();
 
         $new_project = new Project();
@@ -67,6 +72,12 @@ class ProjectController extends Controller
 
         $new_project->fill($form_data);
         $new_project->save();
+
+        if ($request->has('tags')) {
+            $new_project->technologies()->attach($request->tags);
+        }
+
+        // dd($request);
 
         return redirect()->route('admin.projects.index');
     }

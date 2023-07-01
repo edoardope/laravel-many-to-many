@@ -33,6 +33,20 @@ dark
               <div class="alert alert-danger">{{ $message }}</div>
               @enderror
           </div>
+          <div class="form-group">
+
+            @foreach( $technologies as $elem )
+            
+            <div class="form-check">
+                  <input class="form-check-input" type="checkbox" name="tags[]" value="{{$elem->id}}" id="post-checkbox-{{$elem->id}}">
+                  <label class="form-check-label" for="post-checkbox-{{$elem->id}}">
+                    {{$elem->name}}
+                  </label>
+            </div>
+            
+            @endforeach
+            
+            </div>
             <input class="btn btn-primary" type="submit" value="Submit">
         </form>
     </div>

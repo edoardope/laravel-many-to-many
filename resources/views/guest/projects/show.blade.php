@@ -13,8 +13,9 @@
         <h6 class="text-center">type: {{$project->type->name}}</h1>
     </div>
     @foreach ($project->technologies as $elem)
-   <div class="h6 text-center"> technologies: {{$elem->name}}</div>
-@endforeach
+     <div class="h6 text-center"> technologies: {{$elem->name}}</div>
+    @endforeach
+    
 </section>
 
 
